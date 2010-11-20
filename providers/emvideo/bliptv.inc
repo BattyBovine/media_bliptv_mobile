@@ -290,27 +290,27 @@ function theme_media_bliptv_flash($code, $width, $height, $field, $item, $autopl
       }*/
     }
 
-    // if (preg_match("/^m\./i",$_SERVER["HTTP_HOST"])>0 or
-	// preg_match("/\.mobi$/i",$_SERVER["HTTP_HOST"])>0) {
-	  // $height -= 30;
-      // $useragent = $_SERVER["HTTP_USER_AGENT"];
-	  // if(preg_match("/ipad/i",$useragent)>0 or
-      // preg_match("/iphone/i",$useragent)>0 or
-      // preg_match("/ipod/i",$useragent)>0) {
-        // if(!empty($item['data']['m4v'])) {
-          // $output .= '<p class="nomobile">Note: iPhone embeds are currently not working properly. We are working on a solution.</p><embed src="http://blip.tv/play/'. (empty($embed_code)?$code:$embed_code).'%2Em4v" type="application/x-shockwave-flash" width="'. ($width/2) .'" height="'. ($height/2) .'" allowscriptaccess="always" allowfullscreen="true" wmode="opaque" style="margin:0 auto"></embed>';
-		// } else {
-          // $output .= '<p class="nomobile">Sorry, but this video has no iPhone version available at this time.</p>';
-		// }
+    if (preg_match("/^m\./i",$_SERVER["HTTP_HOST"])>0 or
+	preg_match("/\.mobi$/i",$_SERVER["HTTP_HOST"])>0) {
+	  $height -= 30;
+      $useragent = $_SERVER["HTTP_USER_AGENT"];
+	  if(preg_match("/ipad/i",$useragent)>0 or
+      preg_match("/iphone/i",$useragent)>0 or
+      preg_match("/ipod/i",$useragent)>0) {
+        if(!empty($item['data']['m4v'])) {
+          $output .= '<p class="nomobile">Note: iPhone embeds are currently not working properly. We are working on a solution.</p><embed src="http://blip.tv/play/'. (empty($embed_code)?$code:$embed_code).'%2Em4v" type="application/x-shockwave-flash" width="'. ($width/2) .'" height="'. ($height/2) .'" allowscriptaccess="always" allowfullscreen="true" wmode="opaque" style="margin:0 auto"></embed>';
+		} else {
+          $output .= '<p class="nomobile">Sorry, but this video has no iPhone version available at this time.</p>';
+		}
       // } else if(preg_match("/android/i",$useragent)>0) {
         // $output .= '<script src="http://blip.tv/play/'.$embed_code.'.js?width='.($width/2).'&height='.($height/2).'" type="text/javascript"></script><noscript>'.emvideo_bliptv_mobile_embed($item).'</noscript>';
-	  // } else if(!empty($item['data']['3gp']) or
-                // !empty($item['data']['m4v'])) {
-        // $output .= emvideo_bliptv_mobile_embed($item);
-      // } else {
-        // $output .= '<p class="nomobile">Sorry, but this video has no mobile version available at this time.</p>';
-      // }
-    // } else {
+	  } else if(!empty($item['data']['3gp']) or
+                !empty($item['data']['m4v'])) {
+        $output .= emvideo_bliptv_mobile_embed($item);
+      } else {
+        $output .= '<p class="nomobile">Sorry, but this video has no mobile version available at this time.</p>';
+      }
+    } else {
       $output .= '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" width="' . $width .'" height="'. $height .'">
       <param name="movie" value="http://blip.tv/play/'. $embed_code . '" />
       <param name="quality" value="high" />
@@ -331,7 +331,7 @@ function theme_media_bliptv_flash($code, $width, $height, $field, $item, $autopl
       </object>
       <!--> <![endif]-->
       </object>';
-    // }
+    }
   }
 
   return $output;
