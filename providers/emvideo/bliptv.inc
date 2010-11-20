@@ -298,30 +298,15 @@ function theme_media_bliptv_flash($code, $width, $height, $field, $item, $autopl
       preg_match("/iphone/i",$useragent)>0 or
       preg_match("/ipod/i",$useragent)>0) {
         if(!empty($item['data']['m4v'])) {
-          $output .= '<embed src="http://blip.tv/play/'. (empty($embed_code)?$code:$embed_code).'%2Em4v" type="application/x-shockwave-flash" width="'. ($width/4) .'" height="'. ($height/4) .'" allowscriptaccess="always" allowfullscreen="true" wmode="opaque" style="margin:0 auto"></embed>';
+          $output .= '<p class="nomobile">Note: iPhone embeds are currently not working properly. We are working on a solution.</p><embed src="http://blip.tv/play/'. (empty($embed_code)?$code:$embed_code).'%2Em4v" type="application/x-shockwave-flash" width="'. ($width/4) .'" height="'. ($height/4) .'" allowscriptaccess="always" allowfullscreen="true" wmode="opaque" style="margin:0 auto"></embed>';
 		} else {
           $output .= '<p class="nomobile">Sorry, but this video has no iPhone version available at this time.</p>';
 		}
+      } else if(preg_match("/android/i",$useragent)>0) {
+        $output .= '<script src="http://blip.tv/play/'.$embed_code.'.js?width='.($width/4).'&height='.($height/4).'" type="text/javascript"></script><noscript>'.emvideo_bliptv_mobile_embed($item).'</noscript>';
 	  } else if(!empty($item['data']['3gp']) or
                 !empty($item['data']['m4v'])) {
-        $refdata = '?referrer='.emvideo_bliptv_current_page_escaped();
-        // $output .= '<img src="'.$item['data']['thumbnail']['url'].'" style="font-size:10px;width:'.($width/4).'px;height:'.($height/4).'px;" title="'.$item['data']['title'].' Mobile Video Thumbnail" alt="'.$item['data']['title'].' Mobile Video Thumbnail" width="'.($width/4).'" height="'.($height/4).'"/>';
-        $width = $item['data']['3gp']['width'];
-        $height = $item['data']['3gp']['height'];
-        if(!empty($item['data']['3gp'])) {
-          $file3gp = $item['data']['3gp']['url'];
-          $sizearray3gp = emvideo_bliptv_get_video_size($item['data']['3gp']['size']);
-          $output .= '<p style="text-align:left;"><a href="'.$file3gp.$refdata.'&ext=.3gp">';
-		  $output .= 'Play Video (3GPP, '.round($sizearray3gp[0],1).' '.$sizearray3gp[1].'bytes)';
-          $output .= "</a></p>";
-        }
-        if(!empty($item['data']['m4v'])) {
-          $filem4v = $item['data']['m4v']['url'];
-          $sizearraym4v = emvideo_bliptv_get_video_size($item['data']['m4v']['size']);
-          $output .= '<p style="text-align:left;"><a href="'.$filem4v.$refdata.'&ext=.m4v">';
-          $output .= 'Play Video (MPEG-4, '.round($sizearraym4v[0],1).' '.$sizearraym4v[1].'bytes)';
-          $output .= '</a></p>';
-        }
+        $output .= emvideo_bliptv_mobile_embed($item);
       } else {
         $output .= '<p class="nomobile">Sorry, but this video has no mobile version available at this time.</p>';
       }
@@ -350,6 +335,29 @@ function theme_media_bliptv_flash($code, $width, $height, $field, $item, $autopl
   }
 
   return $output;
+}
+
+function emvideo_bliptv_mobile_embed($item) {
+  $returndata = '';
+  $refdata = '?referrer='.emvideo_bliptv_current_page_escaped();
+  // $returndata .= '<img src="'.$item['data']['thumbnail']['url'].'" style="font-size:10px;width:'.($width/4).'px;height:'.($height/4).'px;" title="'.$item['data']['title'].' Mobile Video Thumbnail" alt="'.$item['data']['title'].' Mobile Video Thumbnail" width="'.($width/4).'" height="'.($height/4).'"/>';
+  $width = $item['data']['3gp']['width'];
+  $height = $item['data']['3gp']['height'];
+  if(!empty($item['data']['3gp'])) {
+    $file3gp = $item['data']['3gp']['url'];
+    $sizearray3gp = emvideo_bliptv_get_video_size($item['data']['3gp']['size']);
+    $returndata .= '<p style="text-align:left;"><a href="'.$file3gp.$refdata.'&ext=.3gp">';
+    $returndata .= 'Play Video (3GPP, '.round($sizearray3gp[0],1).' '.$sizearray3gp[1].'bytes)';
+    $returndata .= "</a></p>";
+  }
+  if(!empty($item['data']['m4v'])) {
+    $filem4v = $item['data']['m4v']['url'];
+    $sizearraym4v = emvideo_bliptv_get_video_size($item['data']['m4v']['size']);
+    $returndata .= '<p style="text-align:left;"><a href="'.$filem4v.$refdata.'&ext=.m4v">';
+    $returndata .= 'Play Video (MPEG-4, '.round($sizearraym4v[0],1).' '.$sizearraym4v[1].'bytes)';
+    $returndata .= '</a></p>';
+  }
+  return $returndata;
 }
 
 function emvideo_bliptv_thumbnail($field, $item, $formatter, $node, $width, $height, $options = array()) {
