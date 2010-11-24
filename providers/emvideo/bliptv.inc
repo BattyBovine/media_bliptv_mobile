@@ -259,7 +259,7 @@ function theme_media_bliptv_flash($code, $width, $height, $field, $item, $autopl
   if ($code) {
     $count++;
     $id = isset($options['id']) ? $options['id'] : "emfield_videocck_player_bliptv_$count";
-    $autoplay = $autoplay ? 'autostart=true' : 'autostart=false';
+    $autostart = $autoplay ? 'autostart=true' : 'autostart=false';
 
     $rss = $item['data']['showpage'] ? "&amp;feedurl={$item['data']['showpage']}/rss" : '';
     $post_id = $item['data']['post_id'];
@@ -272,13 +272,13 @@ function theme_media_bliptv_flash($code, $width, $height, $field, $item, $autopl
       $embed_code = $item['data']['m4v']['embed_code']['0'];
     }
     $file = 'http://blip.tv/rss/flash/'. $item['data']['post_id'];
-    $embed_file = 'http://blip.tv/scripts/flash/showplayer.swf?'. $autoplay .'&amp;enablejs=true'. $rss .'&amp;file='. $file .'&amp;showplayerpath=http://blip.tv/scripts/flash/showplayer.swf';
+    $embed_file = 'http://blip.tv/scripts/flash/showplayer.swf?'. $autostart .'&amp;enablejs=true'. $rss .'&amp;file='. $file .'&amp;showplayerpath=http://blip.tv/scripts/flash/showplayer.swf';
 
     if ($item['data']['video_cck_bliptv_data_version'] == 1) {
       // If this is an old version of the data, then we'll attempt to display.
       // Bad on the admin, however; they need to run emfield's update.
-      $autoplay = $autoplay ? 'autostart=true' : 'autostart=false';
-      $embed_file = "http://blip.tv/scripts/flash/blipplayer.swf?$autoplay&amp;file=$flv%3Fsource%3D3";
+      $autostart = $autoplay ? 'autostart=true' : 'autostart=false';
+      $embed_file = "http://blip.tv/scripts/flash/blipplayer.swf?$autostart&amp;file=$flv%3Fsource%3D3";
       // Now we'll resave the node so the data is saved properly in the future.
       // @TODO: Do this in cron, or even in update?
       // @NOTE: We now do this in an update.
@@ -302,8 +302,10 @@ function theme_media_bliptv_flash($code, $width, $height, $field, $item, $autopl
 		} else {
           $output .= '<p class="nomobile">Sorry, but this video has no iPhone version available at this time.</p>';
 		}
-      // } else if(preg_match("/android/i",$useragent)>0) {
-        // $output .= '<script src="http://blip.tv/play/'.$embed_code.'.js?width='.($width/2).'&height='.($height/2).'" type="text/javascript"></script><noscript>'.emvideo_bliptv_mobile_embed($item).'</noscript>';
+      } else if(preg_match("/android/i",$useragent)>0) {
+        // Embed codes end with A-D for autoplay, and I-L for none
+        $embed_code = substr($embed_code,0,-1);
+        $output .= '<script src="http://blip.tv/play/'.($embed_code+($autoplay?"A":"I")).'.js?width='.($width/2).'&height='.($height/2).'" type="text/javascript"></script><noscript>'.emvideo_bliptv_mobile_embed($item).'</noscript>';
 	  } else if(!empty($item['data']['3gp']) or
                 !empty($item['data']['m4v'])) {
         $output .= emvideo_bliptv_mobile_embed($item);
@@ -317,7 +319,7 @@ function theme_media_bliptv_flash($code, $width, $height, $field, $item, $autopl
       <param name="bgcolor" value="#FFFFFF" />
       <param name="wmode" value="transparent" />
       <param name="allowfullscreen" value="true" />
-      '.($autoplay?'<param name="flashvars" value="'.$autoplay.'" />':'').'
+      '.($autostart?'<param name="flashvars" value="'.$autostart.'" />':'').'
 
       <!--[if !IE]> <-->
       <object data="http://blip.tv/play/'. $embed_code.'" width="'. $width .'" height="'. $height .'" type="application/x-shockwave-flash">
@@ -325,7 +327,7 @@ function theme_media_bliptv_flash($code, $width, $height, $field, $item, $autopl
       <param name="bgcolor" value="#FFFFFF" />
       <param name="wmode" value="transparent" />
       <param name="allowfullscreen" value="true" />
-      '.($autoplay?'<param name="flashvars" value="'.$autoplay.'" />':'').'
+      '.($autostart?'<param name="flashvars" value="'.$autostart.'" />':'').'
       <param name="pluginurl" value="http://www.adobe.com/go/getflashplayer" />
       <p class="noflash">It seems you don\'t have a recent version of Adobe Flash.  Try <a href="http://www.adobe.com/go/getflashplayer">downloading it here</a>, then reload the page.</p>
       </object>
