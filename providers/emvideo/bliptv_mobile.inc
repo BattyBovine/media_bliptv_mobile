@@ -71,6 +71,8 @@ function emvideo_bliptv_mobile_data($field, $item) {
 
   // get our thumbnail url
   $data['thumbnail']['url'] = $rss['ITEM']['MEDIA:THUMBNAIL'][1]['URL'];
+  if(!preg_match("/a\.images\.blip\.tv/",$data['thumbnail']['url']))
+    $data['thumbnail']['url'] = "http://a.images.blip.tv".$data['thumbnail']['url'];
   // this gets sent to the player
   foreach ((array)$api['MEDIA']['LINK'] as $x => $link) {
     $x--;
