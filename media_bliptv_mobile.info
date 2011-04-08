@@ -1,0 +1,8 @@
+; $Id: media_bliptv_mobile.info,v 1.1 2010/04/14 17:38:42 aaron Exp $
+
+name = Media: BlipTV Mobile
+description = Provides BlipTV support to the Embedded Media Field module.
+package = "Media"
+core = 6.x
+dependencies[] = emfield
+dependencies[] = emvideo

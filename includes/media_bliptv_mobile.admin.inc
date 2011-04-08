@@ -1,29 +1,29 @@
 <?php
-// $Id: media_bliptv.admin.inc,v 1.1.2.1 2010/09/23 19:19:08 aaron Exp $
+// $Id: media_bliptv_mobile.admin.inc,v 1.1.2.1 2010/09/23 19:19:08 aaron Exp $
 
 /**
- * @file media_bliptv/includes/media_bliptv.admin.inc
- * Administrative functions for Media: BlipTV.
+ * @file media_bliptv_mobile/includes/media_bliptv_mobile.admin.inc
+ * Administrative functions for Media: BlipTV Mobile.
  */
 
 /**
- * The administrative settings form for Media: BlipTV.
+ * The administrative settings form for Media: BlipTV Mobile.
  */
-function media_bliptv_settings() {
-  $form = media_bliptv_admin_form();
+function media_bliptv_mobile_settings() {
+  $form = media_bliptv_mobile_admin_form();
   $form['settings_info'] = array(
     '#type' => 'item',
-    '#value' => t('These settings specifically affect videos displayed from !bliptv. You can also read more about its !api.', array('!bliptv' => l(t('BlipTV'), MEDIA_BLIPTV_MAIN_URL, array('attributes' => array('target' => '_blank'))), '!api' => l(t("developer's API"), MEDIA_BLIPTV_API_INFO, array('attributes' => array('target' => '_blank'))))),
+    '#value' => t('These settings specifically affect videos displayed from !bliptv_mobile. You can also read more about its !api.', array('!bliptv_mobile' => l(t('BlipTV'), MEDIA_BLIPTV_MOBILE_MAIN_URL, array('attributes' => array('target' => '_blank'))), '!api' => l(t("developer's API"), MEDIA_BLIPTV_MOBILE_API_INFO, array('attributes' => array('target' => '_blank'))))),
     '#weight' => -10,
   );
   return system_settings_form($form);
 }
 
 /**
- * This form will be displayed both at /admin/settings/media_bliptv and
+ * This form will be displayed both at /admin/settings/media_bliptv_mobile and
  * admin/content/emfield.
  */
-function media_bliptv_admin_form() {
+function media_bliptv_mobile_admin_form() {
   $tags = array('none' => t('No video'), 'flv' => t('Flash Video'), 'override' => t('Override tag'), 'web' => t('Web'), 'Web High Resolution' => t('Web High Resolution'), 'Portable (iPod)' => t('Portable (iPod)'), 'Portable (other)' => t('Portable (other)'), 'Television' => t('Television'), 'HDTV' => t('HDTV'), 'Cell Phone' => t('Cell Phone'), 'Source' => t('Source'));
   $formats = array('none' => t('No video'), 'flv' => t('Flash video (flv)'), 'mov' => t('Quicktime Movie (mov)'), 'mp3' => t('MP3'), 'm4a' => t('m4a'), 'mpg' => t('MPEG'), 'mp4' => t('mp4'), 'm4v' => t('m4v'), 'wmv' => t('Windows Media (wmv)'));
 
@@ -43,19 +43,19 @@ function media_bliptv_admin_form() {
     '#collapsed' => TRUE,
   );
 
-  $form['video_formats']['rss']['emvideo_bliptv_rss_tag'] = array(
+  $form['video_formats']['rss']['emvideo_bliptv_mobile_rss_tag'] = array(
     '#type' => 'select',
     '#title' => t('RSS full page tag'),
     '#description' => t("When RSS feeds are displayed, and this tag is available for a video, then the clip for that tag will be displayed as an enclosure tag in the feed. Select 'Override tag' if you wish to control the format displayed. Select 'No video' if you do not wish a video to be displayed in RSS feeds."),
     '#options' => $tags,
-    '#default_value' => media_bliptv_variable_get('rss_tag'),
+    '#default_value' => media_bliptv_mobile_variable_get('rss_tag'),
   );
-  $form['video_formats']['rss']['emvideo_bliptv_rss_format'] = array(
+  $form['video_formats']['rss']['emvideo_bliptv_mobile_rss_format'] = array(
     '#type' => 'select',
     '#title' => t('RSS full page format override'),
     '#description' => t("When RSS feeds are displayed, and the 'Override tag' option is selected above, then this format will be displayed as an enclosure tag in the feed."),
     '#options' => $formats,
-    '#default_value' => media_bliptv_variable_get('rss_format'),
+    '#default_value' => media_bliptv_mobile_variable_get('rss_format'),
   );
   return $form;
 }
